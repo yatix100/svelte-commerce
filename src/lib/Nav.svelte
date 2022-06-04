@@ -17,78 +17,68 @@ import { page, session } from '$app/stores'
 import Cookies from 'universal-cookie'
 const cookies = new Cookies()
 import { spring } from 'svelte/motion'
-import { cart } from '../../store/cart'
 import Search from '$lib/Search.svelte'
-export let section
+import { Categories } from './graphql/_kitql/graphqlTypes'
+import { KQL_Cart, KQL_Init, KQL_Me } from './graphql/_kitql/graphqlStores'
+import { signOut } from './services'
+import { onMount } from 'svelte'
+import { toast } from './util'
 
-const cart_qty = spring()
-$: cart_qty.set($cart.qty)
-$: offset = modulo($cart_qty, 1)
+onMount(async () => {
+	await KQL_Me.query({})
+	await KQL_Cart.query({ settings: { policy: 'network-only' } })
+})
+export let q, me, store
 
-function modulo(n, m) {
-	// handle negative numbers
-	return ((n % m) + m) % m
-}
-async function logout() {
+async function handleSignout() {
 	try {
-		// const res = await post('auth/logout')
-		cookies.remove('token')
-		$session.user = null
+		await signOut()
+		$session.me = null
 		$session.token = null
-		goto('/login')
-	} catch (e) {}
+		$session.sid = null
+		toast('Signed Out...', 'success')
+		goto('/auth/login')
+	} catch (e) {
+		toast(e, 'error')
+	} finally {
+	}
 }
+
+onMount(async () => {
+	try {
+		await KQL_Cart.query({ variables: { store: store?.id }, settings: { cacheMs: 0 } })
+	} catch (e) {
+	} finally {
+	}
+})
 </script>
 
-<nav class=" p-4 shadow-md border-gray-100 frosted">
+<nav class=" frosted border-gray-100 p-4 shadow-md">
 	<div class="flex items-center justify-between">
-		<a href="/" class="flex items-center focus:outline-none max-w-max">
-			<img alt="" class="h-8" src="/logo.svg" />
-			<!-- <div class="">
-				<h2 class="ml-2 text-xl font-bold tracking-wide">LITEKART</h2>
-				<div class="ml-auto h-0.5 w-10 bg-pink-700"></div>
-			</div> -->
+		<a href="/" class="flex max-w-max items-center focus:outline-none">
+			<img alt="" class="h-8" src="/logo.png" />
 		</a>
-		<div
-			class="flex items-center justify-center w-full ml-8 text-sm font-semibold tracking-wide uppercase xl:ml-10">
-			{#each $session.categories as c}
-				<a
-					href="{`/search?categories=${c?.slug}&page=1`}"
-					class="mx-2 cursor-pointer hover:text-primary-500 whitespace-nowrap xl:mx-5"
-					class:active="{$page.query == `categories=${c.slug}&page=1`}">
-					{c?.name}
-				</a>
-			{/each}
-		</div>
-		<!-- <Search /> -->
-		<!-- <div class="w-1/2 mx-5">
-		<label class="relative flex items-center">
-			<input
-				type="text"
-				placeholder="Search for products..."
-				class="w-full bg-transparent py-1.5 pdl focus:outline-none rounded-full border border-gray-800" />
-			<div class="absolute ml-4">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					class="w-5 h-5 "
-					viewBox="0 0 20 20"
-					fill="currentColor">
-					<path
-						fill-rule="evenodd"
-						d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-						clip-rule="evenodd"></path>
-				</svg>
+		{#if $KQL_Init.data?.megamenu}
+			<div
+				class="ml-8 flex w-full items-center justify-center text-sm font-semibold uppercase tracking-wide xl:ml-10">
+				{#each $KQL_Init.data?.megamenu as c}
+					<a
+						href="{`/search?categories=${c?.slug}&page=1`}"
+						class="mx-2 cursor-pointer whitespace-nowrap hover:text-primary-500 xl:mx-5"
+						class:active="{$page.url.pathname == `categories=${c.slug}&page=1`}">
+						{c?.name}
+					</a>
+				{/each}
 			</div>
-		</label>
-	</div> -->
-
+		{/if}
 		<div class="flex flex-row items-center">
-			<a href="/cart" class:selected="{section === 'cart'}">
+			<a href="/cart">
 				<button
-					class="flex items-center mr-5 font-semibold transform focus:outline-none whitespace-nowrap active:scale-95 hover:text-primary-500 group">
+					type="button"
+					class="group mr-5 flex transform items-center whitespace-nowrap font-semibold hover:text-primary-500 focus:outline-none active:scale-95">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="w-5 h-5 mr-1"
+						class="mr-1 h-5 w-5"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor">
@@ -98,16 +88,17 @@ async function logout() {
 							stroke-width="2"
 							d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
 					</svg>
-
-					<span
-						class="counter-digits absolute flex items-center justify-center p-0.5 text-extrasmall text-white bg-black group-hover:bg-primary-500 rounded-full w-4 h-4 top-0 right-0 -mr-2 -mt-2"
-						style="transform: translate(0, {100 * offset}%)">{Math.floor($cart_qty)}</span>
+					{#if $KQL_Cart.data?.cart.qty}
+						<span
+							class="counter-digits text-extrasmall absolute top-0 right-0 -mr-2 -mt-2 flex h-4 w-4 items-center justify-center rounded-full bg-black p-0.5 text-white group-hover:bg-primary-500"
+							style="transform: translate(0, {100}%)">{Math.floor($KQL_Cart.data?.cart.qty)}</span>
+					{/if}
 				</button>
 			</a>
 
 			<a href="/wishlist">
 				<button
-					class="flex items-center mr-5  transform focus:outline-none whitespace-nowrap active:scale-95 hover:text-primary-500 group">
+					class="group mr-5 flex  transform items-center whitespace-nowrap hover:text-primary-500 focus:outline-none active:scale-95">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-6 w-6"
@@ -123,24 +114,17 @@ async function logout() {
 					</svg>
 				</button>
 			</a>
-
-			{#if $session.user}
-				<a
-					class:selected="{section === 'login'}"
-					href="/my"
-					class="min-w-max flex items-center mx-2 ">
-					{#if $session?.user?.firstName}
-						<div class=" flex-1 text-sm font-semibold mr-2 whitespace-nowrap">
-							<span>Hi {$session?.user?.firstName}</span>
+			{#if !$KQL_Me.errors}
+				<a href="/my" class="mx-2 flex min-w-max items-center ">
+					{#if me?.firstName}
+						<div class=" mr-2 flex-1 whitespace-nowrap text-sm font-semibold">
+							<span>Hi {me?.firstName}</span>
 						</div>
 					{/if}
 
 					<div class="flex-shrink-0">
-						{#if $session?.user?.avatar}
-							<img
-								src="{session?.user?.avatar}"
-								alt=""
-								class="w-10 shadow h-10 bg-white rounded-full " />
+						{#if me?.avatar}
+							<img src="{me?.avatar}" alt="" class="h-10 w-10 rounded-full bg-white shadow " />
 						{:else}
 							<img
 								src="/leadership-profile.png"

@@ -6,13 +6,9 @@
 </style>
 
 <script context="module">
-import { get } from '../../../util/api'
-
-export async function load({ page: { host, path, params, query }, fetch }) {
-	let q = query.toString()
-	// 		query.forEach((v,k)=>{
-	// 		});
-	const page = +query.get('page')
+export async function load({ url, params, fetch }) {
+	let q = url.searchParams.gelAll().toString()
+	const page = +url.searchParams.get('page')
 	const products = await get(`products/es?${q}`)
 	const facets = products.facets.all_aggs
 
@@ -21,16 +17,16 @@ export async function load({ page: { host, path, params, query }, fetch }) {
 			page,
 			products,
 			facets,
-			query: q,
-		},
+			query: q
+		}
 	}
 }
 </script>
 
 <script>
 import { goto } from '$app/navigation'
-import { constructQry, constructURL2 } from '../../../util'
-import { sorts } from '../../../../config'
+import { constructQry, constructURL2 } from '$lib/util'
+import { sorts } from '$lib/config'
 import Product from '$lib/Product.svelte'
 // import Pagination from './_Pagination.svelte'
 // import ProductSkeleton from './_ProductSkeleton.svelte'
@@ -80,20 +76,20 @@ function toggle(e) {
 
 const seoProps = {
 	title: 'Search-Product',
-	metadescription: 'search what you want',
+	metadescription: 'search what you want'
 }
 </script>
 
 <SEO {...seoProps} />
 
-<section class="w-full text-gray-800 lg:px-20 lg:my-32">
+<section class="w-full text-gray-800 lg:my-32 lg:px-20">
 	<!-- Nav bar start -->
 	<nav
-		class="fixed flex justify-between w-full p-2 border-b border-gray-400 shadow md:hidden frosted">
+		class="frosted fixed flex w-full justify-between border-b border-gray-400 p-2 shadow md:hidden">
 		<a href="/">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
-				class="w-6 h-6"
+				class="h-6 w-6"
 				fill="none"
 				viewBox="0 0 24 24"
 				stroke="currentColor">
@@ -108,7 +104,7 @@ const seoProps = {
 
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
-			class="w-6 h-6"
+			class="h-6 w-6"
 			fill="none"
 			viewBox="0 0 24 24"
 			stroke="currentColor">
@@ -121,8 +117,8 @@ const seoProps = {
 	</nav>
 	<!-- Nav bar end -->
 
-	<div class="flex w-full mt-24">
-		<div class="hidden mr-5 lg:block">
+	<div class="mt-24 flex w-full">
+		<div class="mr-5 hidden lg:block">
 			<!-- <DesktopFilters facets="{facets}" query="{query}" /> -->
 		</div>
 
@@ -140,17 +136,17 @@ const seoProps = {
 				</h2>
 			</div>
 			<!-- No result section end -->
-			<div class="w-full py-0.5 border-b ">
+			<div class="w-full border-b py-0.5 ">
 				<div class="flex items-center justify-between p-4 ">
-					<div class="text-sm text-gray-400 md:text-base whitespace-nowrap sm:font-medium ">
+					<div class="whitespace-nowrap text-sm text-gray-400 sm:font-medium md:text-base ">
 						<span>589 items found</span>
 					</div>
 					<div class="flex items-center space-x-1">
-						<h5 class="text-xs text-gray-400 md:text-base whitespace-nowrap sm:font-medium">
+						<h5 class="whitespace-nowrap text-xs text-gray-400 sm:font-medium md:text-base">
 							SORT BY
 						</h5>
 						<select
-							class="w-32 pt-0 font-semibold border border-gray-500 h-7 md:h-full md:w-44 md:p-1 focus:outline-none"
+							class="h-7 w-32 border border-gray-500 pt-0 font-semibold focus:outline-none md:h-full md:w-44 md:p-1"
 							name=""
 							id="">
 							<option value="">Relevance</option>
@@ -165,7 +161,7 @@ const seoProps = {
 
 			<!-- Result section start  -->
 
-			<div class="flex flex-wrap mx-2 mt-5 mb-12">
+			<div class="mx-2 mt-5 mb-12 flex flex-wrap">
 				{#each products.data as p}
 					{#if p}
 						<Product product="{p}" />

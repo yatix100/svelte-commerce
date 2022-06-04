@@ -1,5 +1,5 @@
 <script>
-import { authorInfo, WWW_URL } from './../../../../config'
+import { authorInfo, WWW_URL } from '$lib/config'
 import OpenGraph from './OpenGraph.svelte'
 import SchemaOrg from './SchemaOrg.svelte'
 import Twitter from './Twitter.svelte'
@@ -16,18 +16,19 @@ const {
 	githubPage,
 	linkedinProfile,
 	telegramUsername,
-	twitterUsername,
+	twitterUsername
 } = authorInfo
 
 export let article = false
 export let breadcrumbs = []
 export let entityMeta = null
-export let lastUpdated
-export let datePublished
-export let metadescription
-export let slug
+export let lastUpdated = null
+export let datePublished = null
+export let metadescription = ''
+export let slug = ''
 export let timeToRead = 0
-export let title
+export let title = ''
+export let keywords = ''
 
 const defaultAlt = ''
 
@@ -36,19 +37,19 @@ export let featuredImage = {
 	alt: defaultAlt,
 	width: 672,
 	height: 448,
-	caption: 'Home page',
+	caption: 'Home page'
 }
 export let ogImage = {
 	url: '',
-	alt: defaultAlt,
+	alt: defaultAlt
 }
 export let ogSquareImage = {
 	url: '',
-	alt: defaultAlt,
+	alt: defaultAlt
 }
 export let twitterImage = {
 	url: '',
-	alt: defaultAlt,
+	alt: defaultAlt
 }
 const url = `${WWW_URL}/${slug}`
 const pageTitle = `${title} ${siteTitle}`
@@ -63,7 +64,7 @@ const openGraphProps = {
 	pageTitle,
 	siteTitle,
 	url,
-	...(article ? { datePublished, lastUpdated, facebookPage, facebookAuthorPage } : {}),
+	...(article ? { datePublished, lastUpdated, facebookPage, facebookAuthorPage } : {})
 }
 const schemaOrgProps = {
 	article,
@@ -85,20 +86,21 @@ const schemaOrgProps = {
 	githubPage,
 	linkedinProfile,
 	telegramUsername,
-	twitterUsername,
+	twitterUsername
 }
 const twitterProps = {
 	article,
 	author,
 	twitterUsername,
 	image: twitterImage,
-	timeToRead,
+	timeToRead
 }
 </script>
 
 <svelte:head>
 	<title>{pageTitle}</title>
 	<meta name="description" content="{metadescription}" />
+	<meta name="keywords" content="{keywords}" />
 	<meta
 		name="robots"
 		content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />

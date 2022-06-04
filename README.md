@@ -1,5 +1,5 @@
-<a href="https://www.litekart.in/">
-<img src="https://github.com/itswadesh/svelte-commerce/blob/master/static/litekart-banner.png?raw=true" alt/>
+<a href="https://misiki.in/">
+<img src="https://repository-images.githubusercontent.com/213575283/f577b8bd-8edb-41ba-bfe5-36e65072e1f2" alt/>
 </a>
 
 ![version](https://img.shields.io/badge/node-v16.x-blue.svg)
@@ -16,10 +16,13 @@
 
 ### Svelte Commerce is an advanced Frontend Platform for eCommerce based on Sveltekit
 
-<a href="https://svelte-commerce.litekart.in/" target="blank">Demo</a>
+- Demo <a href="https://kitcommerce.tech/" target="blank">Kitcommerce.tech</a>
+- Svelte commerce in real world foodtech ecommerce https://food.misiki.in/
+- Svelte commerce in home made FNB sector https://homefood.tech/ (https://github.com/itswadesh/homefood)
+
 <br/>
 
-- 🛍️ Attach Svelte store front to any ecommerce API (e.g. <a href="https://www.litekart.in/"> Litekart</a>, <a href="https://magento.com/">Magento</a>, <a href="https://www.moltin.com/">Moltin</a>, <a href="https://www.shopify.com/">Shopify</a> ...)
+- 🛍️ Attach Svelte store front to any ecommerce API (e.g. <a href="https://misiki.in/"> Misiki SAAS </a>, <a href="https://magento.com/">Magento</a>, <a href="https://www.moltin.com/">Moltin</a>, <a href="https://www.shopify.com/">Shopify</a> ...)
 - 👥 The demo uses litekart as backend
 - 👨🏻‍💻 Its both SSR and SPA
 - 🚀 Superfast
@@ -30,7 +33,7 @@
 - 💰 No need to make a big leap or invest huge amount. Just take this opend source project and attach to existing backend.
 - 🐛 If you have discovered a bug or have feature suggestion, feel free to create/join a discussion on Github.
 - 👍 I have been supporting this project alone since 2019. Any little code contribution will be appreciated
-- ✨Demo is hosted at netlify USA server and without CDN. Hence you may experience little lag.
+- ✨ Deployment to Netlify or Vercel with zero-configuration
 
 |                                                                                                                                           |                                                                                                                                             |                                                                                                                                           |
 | :---------------------------------------------------------------------------------------------------------------------------------------- | :-----------------------------------------------------------------------------------------------------------------------------------------: | ----------------------------------------------------------------------------------------------------------------------------------------: |
@@ -38,6 +41,15 @@
 
 # Latest Updates
 
+## Update 26-April-2022
+
+- 26-April-2022 - Attached to GraphQL backend
+- 26-April-2022 - Latest SvelteKit version
+- 26-April-2022 - Improved image lazy loading
+- 26-April-2022 - New Banners section
+- 26-April-2022 - New Authentication System
+- 26-April-2022 - New Blogs section
+- 24-April-2022 - Zero-configuration Vercel deployment
 - 22-July-2021 - Integrated with netlify deployment
 - 07-May-2021 - Completely Migrated to SvelteKit
 
@@ -62,11 +74,13 @@ If required change `config/index.ts` according to your requirement
 
 # Deployment
 
-Click on the button to directly deploy to your netlify server. Zero configuration required.
+Click on the button to directly deploy to Netlify or Vercel. Zero configuration required.
 
 <a href="https://app.netlify.com/start/deploy?repository=https://github.com/itswadesh/svelte-commerce">
 <img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to netlify">
 </a>
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&demo-title=SvelteKit%20Commerce)
 
 # Features
 
@@ -95,6 +109,10 @@ Click on the button to directly deploy to your netlify server. Zero configuratio
 # Contributing
 
 If you like the ideas behind Svelte Commerce and want to become a contributor - join github discussions, check the list of the active issues or contact me directly via swadesh@litekart.in
+
+# Thank
+
+A big thank to jycouet for making sucha a wonderful package <a target="_blank" href="https://kitql.vercel.app/">KITQL</a>
 
 # Support me!
 

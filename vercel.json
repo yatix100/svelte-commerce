@@ -1,0 +1,22 @@
+{
+    "rewrites": [
+        {
+            "source": "/graphql",
+            "destination": "https://api.misiki.in/graphql"
+        },
+        {
+            "source": "/api/:path*",
+            "destination": "https://api.misiki.in/api/:path*"
+        },
+        {
+            "source": "/images/:path*",
+            "destination": "https://api.misiki.in/images/:path*"
+        }
+    ],
+    "env": {
+        "VITE_WWW_URL": "https://food.misiki.in",
+        "VITE_DOMAIN": "misiki.in",
+        "HTTP_ENDPOINT": "https://api.misiki.in",
+        "NODE_OPTIONS": "--max-old-space-size=7680"
+    }
+}
